@@ -4,14 +4,23 @@ import viteLogo from '/vite.svg'
 import { Button, Heading, Box } from "@chakra-ui/react"
 import './App.css'
 
+function StartGame() {
+  console.log("Start Game");
+
+  // Fill the grid
+  const grid = Array.from({length: 9} , () => Array(9).fill(0));
+  const rand = Math.round(Math.random() *  9) ;
+  console.log(grid, rand);
+}
+
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
-        <Box p={5}>
-      <Heading mb={4}>Welcome to Ganesha Sudoku!</Heading>
-      <Button colorScheme="teal">Start Game</Button>
+        <Box  bg="black" p={5}>
+      <Heading mb={4} color="white">Welcome to Ganesha Sudoku!</Heading>
+      <Button colorScheme="teal" onClick={StartGame}>Start Game</Button>
     </Box>
       <div>
         <a href="https://vite.dev" target="_blank">
