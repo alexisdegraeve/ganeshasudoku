@@ -1,26 +1,33 @@
 
 import { Button, Heading, Box } from "@chakra-ui/react"
 import { useEffect, useState } from "react";
+import './game.css';
 
 interface GridProps {
   gridData: number[][];
 }
 
 function Grid({gridData}: GridProps) {
+
+    const selectCase = (line: number, row: number) => {
+        console.log(line, row);
+    };
     return (
         <>
             My GRID
+            <div className="grid-full">
             {
                 gridData.map((row, rowIndex: number) => (
-                    <div key={rowIndex}>
+                    <div key={rowIndex} className="grid-row">
                         {
                             row.map((cell: number, colIndex: number) => (
-                                <span key={colIndex}>{cell}</span>
+                                <div className="grid-cell" key={colIndex}  onClick={() => selectCase(rowIndex, colIndex)}>{cell}</div>
                             ))
                         }
                     </div>
                 ))
             }
+            </div>
         </>
     )
 }
