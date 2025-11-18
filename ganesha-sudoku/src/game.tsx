@@ -29,6 +29,7 @@ function Game() {
     const [started, setStarted] = useState(false);
     const [grid, setGrid] = useState<number[][]>([]);
     const [userGrid, setUserGrid] = useState<number[][]>([]);
+    const [nbSelected, setNbSelected] = useState(-1);
 
     useEffect(() => {
         console.log("grid ", grid)
@@ -37,6 +38,10 @@ function Game() {
     const StopGame = () => {
         console.log("Start Game");
         setStarted(false);
+    }
+
+    const changeNbSelected = (nbSelect: number) => {
+        setNbSelected(nbSelect);
     }
 
     // Fill the grid with 0
@@ -60,11 +65,18 @@ function Game() {
                 <Heading mb={4} color="white">Welcome to Ganesha Sudoku!</Heading>
                 <Button colorScheme="teal" onClick={StartGame}>Start Game</Button>
                 <Button colorScheme="red" onClick={StopGame}>Stop Game</Button>
+
+                { Array.from({length: 9}, (_,i) => (
+                    <Button key={i} colorScheme="blue" onClick={() => changeNbSelected(i+1)}>{i + 1}</Button>    
+                    ))
+                }
             </Box>
             {started && <p>Jeux démarré</p>}
             {!started && <p>Jeux arrêté</p>}
 
             <Grid   gridData={userGrid} />
+
+            NB: {nbSelected}
         </>
     )
 
