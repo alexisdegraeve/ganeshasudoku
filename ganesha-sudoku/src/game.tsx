@@ -39,8 +39,13 @@ function Game() {
     const [nbSelected, setNbSelected] = useState(-1);
 
     useEffect(() => {
-        console.log("grid ", grid)
+        if (grid.length > 0) {
+            // ici grid est bien mis à jour
+            console.log("Grid initialisée", grid);
+        }
     }, [grid]);
+
+    
 
     const StopGame = () => {
         console.log("Start Game");
@@ -54,17 +59,33 @@ function Game() {
     // Fill the grid with 0
     const InitGrid = () =>{
         const newGrid = Array.from({ length: 9 }, () => Array(9).fill(0));
+        const row = Math.round(Math.random() * 8);
+        const col = Math.round(Math.random() * 8);
+        const value = Math.round(Math.random() * 9) + 1;
+        console.log(row, col, value);
+        newGrid[row][col] = value;
+
         setGrid(newGrid);
         const newUserGrid = Array.from({ length: 9 }, () => Array(9).fill(0));
         setUserGrid(newUserGrid);
     }
 
+    // const FillGrid = () => {
+    //     const row = Math.round(Math.random() * 8);
+    //     const col = Math.round(Math.random() * 8);
+    //     const value = Math.round(Math.random() * 9) + 1;
+    //     const newGrid = grid.map(r => [...r]);
+    //     console.log(row, col, value);
+    //     newGrid[row][col] = value;
+    //     setGrid(newGrid);
+        
+
+    // }
+
     const StartGame = () => {
         console.log("Start Game");
         setStarted(true);
         InitGrid();
-        const rand = Math.round(Math.random() * 9);
-        console.log(rand);
     }
     return (
         <>
@@ -82,6 +103,8 @@ function Game() {
             {!started && <p>Jeux arrêté</p>}
 
             <Grid   gridData={userGrid} />
+
+            <Grid   gridData={grid} />
 
             NB: {nbSelected}
         </>
