@@ -28,7 +28,7 @@ function Grid({ originalGrid, gridData, nbSelected, wrong, setWrong, setGridData
             // OK
             const newPlayNumbers = [...playNumbers];
             newPlayNumbers[nbSelected]--;
-            setPlayNumbers(newPlayNumbers);    
+            setPlayNumbers(newPlayNumbers);
             const newGrid = gridData.map(r => [...r]); // clone du tableau
             newGrid[line][col] = nbSelected;
             setGridData(newGrid);
@@ -98,7 +98,7 @@ function Game() {
         if (grid.length > 0) {
             // ici grid est bien mis à jour
             console.log("Grid initialisée", grid);
-                    console.log('init playnumbers ', playNumbers);
+            console.log('init playnumbers ', playNumbers);
 
         }
     }, [grid, playNumbers]);
@@ -141,7 +141,7 @@ function Game() {
             const col = Math.floor((Math.random() * 9));
             if (grid[row][col] === -1) continue;
             console.log(row, col);
-            console.log('playNumbers', playNumbers);            
+            console.log('playNumbers', playNumbers);
             const value = grid[row][col];
             newPlayNumbers[value]++;
             grid[row][col] = -1;
@@ -163,7 +163,7 @@ function Game() {
         setGrid(newGrid);
 
         const newUserGrid = newGrid.map(row => [...row]);
-        removeCells(newUserGrid, 40);
+        removeCells(newUserGrid, 5);
         setUserGrid(newUserGrid);
     }
 
@@ -176,46 +176,72 @@ function Game() {
     }
     return (
         <>
+            <Box bg="black" p={5}>
+                <Heading mb={4} color="white">Welcome to Ganesha Sudoku!</Heading>
+                {!started && <>
 
-            {wrong < 3 ? (
-                <>
-                    <Box bg="black" p={5}>
-                        <Heading mb={4} color="white">Welcome to Ganesha Sudoku!</Heading>
-                        <Button colorScheme="teal" onClick={StartGame}>Start Game</Button>
-                        <Button colorScheme="red" onClick={StopGame}>Stop Game</Button>
+                    <Button colorScheme="teal" onClick={StartGame}>Start Game</Button>
 
-                        {playNumbers
-                            .slice(1)
-                            .map((count, i) => ({ index: i + 1, count })) // on garde l'index du chiffre
-                            .filter(item => item.count > 0)  
-                            .map((item) => (
-                            <Button
-                                key={item.index}
-                                className={nbSelected === item.index ? 'button-selected' : 'button-normal'}
-                                onClick={() => changeNbSelected(item.index)}
-                            >
-                                {item.index} ({item.count})
-                            </Button>
-                        ))}
-
-                    </Box>
                     {started && <p>Jeux démarré</p>}
                     {!started && <p>Jeux arrêté</p>}
 
-                    <Grid originalGrid={grid} gridData={userGrid} nbSelected={nbSelected} setGridData={setUserGrid} wrong={wrong} setWrong={setWrong}  playNumbers={playNumbers}  setPlayNumbers={setPlayNumbers} />
-
-                    <Grid originalGrid={grid} gridData={grid} nbSelected={nbSelected} setGridData={setGrid} wrong={wrong} setWrong={setWrong} playNumbers={playNumbers}  setPlayNumbers={setPlayNumbers}  />
-
-                    NB: {nbSelected}
-                    wrong : {wrong}
-{playNumbers}
-
                 </>
+                }
+                {started && !playNumbers.slice(1).every(n => n === 0) &&
+
+                    <Button colorScheme="red" onClick={StopGame}>Stop Game</Button>
+
+                }
+            </Box>
+
+            {wrong < 3 && started ? (
+
+
+
+
+                playNumbers.slice(1).every(n => n === 0) ? (
+                    <>
+                        <p>You Win !</p>
+                        <Button colorScheme="teal" onClick={StartGame}>restart Game</Button>
+                    </>
+                )
+                    : (
+
+                        <>
+                            {playNumbers
+                                .slice(1)
+                                .map((count, i) => ({ index: i + 1, count })) // on garde l'index du chiffre
+                                .filter(item => item.count > 0)
+                                .map((item) => (
+                                    <Button
+                                        key={item.index}
+                                        className={nbSelected === item.index ? 'button-selected' : 'button-normal'}
+                                        onClick={() => changeNbSelected(item.index)}
+                                    >
+                                        {item.index} ({item.count})
+                                    </Button>
+                                ))}
+
+                            <Grid originalGrid={grid} gridData={userGrid} nbSelected={nbSelected} setGridData={setUserGrid} wrong={wrong} setWrong={setWrong} playNumbers={playNumbers} setPlayNumbers={setPlayNumbers} />
+
+                            <Grid originalGrid={grid} gridData={grid} nbSelected={nbSelected} setGridData={setGrid} wrong={wrong} setWrong={setWrong} playNumbers={playNumbers} setPlayNumbers={setPlayNumbers} />
+
+                            NB: {nbSelected}
+                            wrong : {wrong}
+                            {playNumbers}
+
+                        </>
+                    )
+
             ) : (
-            <>
-               <div>LOSE</div>
-               <Button colorScheme="teal" onClick={StartGame}>restart Game</Button>
-            </>
+
+                started &&
+                <>
+                    <div>LOSE</div>
+                    <Button colorScheme="teal" onClick={StartGame}>restart Game</Button>
+                </>
+
+
             )
             }
 
