@@ -92,21 +92,38 @@ function Game() {
     const [nbSelected, setNbSelected] = useState(-1);
     const [wrong, setWrong] = useState(0);
     const [playNumbers, setPlayNumbers] = useState<number[]>([]);
+    const [time, setTime] = useState(0);
+    const [timerActive, setTimerActive] = useState(false);
 
 
     useEffect(() => {
+        if (playNumbers.slice(1).every(n => n === 0)) {
+            setTimeout(() => {
+                setTimerActive(false); // arrêt du timer
+                console.log("You Win !");
+            }, 0);
+        }
         if (grid.length > 0) {
             // ici grid est bien mis à jour
             console.log("Grid initialisée", grid);
             console.log('init playnumbers ', playNumbers);
 
         }
-    }, [grid, playNumbers]);
+
+        if (!timerActive) return;
+        const interval = setInterval(() => {
+            setTime(prev => prev + 1);
+        }, 1000);
+
+        return () => clearInterval(interval);
+
+    }, [grid, playNumbers, timerActive]);
 
 
 
     const StopGame = () => {
         console.log("Start Game");
+        setTimerActive(false);
         setStarted(false);
     }
 
@@ -173,11 +190,14 @@ function Game() {
         setWrong(0);
         setStarted(true);
         InitGrid();
+        setTime(0);
+        setTimerActive(true);
     }
     return (
         <>
             <Box bg="black" p={5}>
                 <Heading mb={4} color="white">Welcome to Ganesha Sudoku!</Heading>
+                <p>Time: {Math.floor(time / 60)}:{String(time % 60).padStart(2, '0')}</p>
                 {!started && <>
 
                     <Button colorScheme="teal" onClick={StartGame}>Start Game</Button>
