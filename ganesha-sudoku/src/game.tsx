@@ -11,9 +11,11 @@ type GridProps = {
     wrong: number;
     setWrong: React.Dispatch<React.SetStateAction<number>>;
     setGridData: React.Dispatch<React.SetStateAction<number[][]>>;
+    playNumbers: number[];
+    setPlayNumbers: React.Dispatch<React.SetStateAction<number[]>>;
 };
 
-function Grid({ originalGrid, gridData, nbSelected, wrong, setWrong, setGridData }: GridProps) {
+function Grid({ originalGrid, gridData, nbSelected, wrong, setWrong, setGridData, playNumbers, setPlayNumbers }: GridProps) {
 
     const selectCase = (line: number, col: number) => {
         console.log(line, col);
@@ -22,10 +24,16 @@ function Grid({ originalGrid, gridData, nbSelected, wrong, setWrong, setGridData
             wrong++;
             setWrong(wrong);
             return;
+        } else {
+            // OK
+            const newPlayNumbers = [...playNumbers];
+            newPlayNumbers[nbSelected]--;
+            setPlayNumbers(newPlayNumbers);    
+            const newGrid = gridData.map(r => [...r]); // clone du tableau
+            newGrid[line][col] = nbSelected;
+            setGridData(newGrid);
         }
-        const newGrid = gridData.map(r => [...r]); // clone du tableau
-        newGrid[line][col] = nbSelected;
-        setGridData(newGrid);
+
     };
     return (
         <>
@@ -83,13 +91,17 @@ function Game() {
     const [userGrid, setUserGrid] = useState<number[][]>([]);
     const [nbSelected, setNbSelected] = useState(-1);
     const [wrong, setWrong] = useState(0);
+    const [playNumbers, setPlayNumbers] = useState<number[]>([]);
+
 
     useEffect(() => {
         if (grid.length > 0) {
             // ici grid est bien mis à jour
             console.log("Grid initialisée", grid);
+                    console.log('init playnumbers ', playNumbers);
+
         }
-    }, [grid]);
+    }, [grid, playNumbers]);
 
 
 
@@ -123,12 +135,19 @@ function Game() {
     }
 
     function removeCells(grid: number[][], total = 5) {
+        const newPlayNumbers: number[] = Array(10).fill(0);
         for (let i = 0; i < total; i++) {
-            const row = Math.floor((Math.random() * 8));
-            const col = Math.floor((Math.random() * 8));
+            const row = Math.floor((Math.random() * 9));
+            const col = Math.floor((Math.random() * 9));
+            if (grid[row][col] === -1) continue;
             console.log(row, col);
+            console.log('playNumbers', playNumbers);            
+            const value = grid[row][col];
+            newPlayNumbers[value]++;
             grid[row][col] = -1;
         }
+        setPlayNumbers(newPlayNumbers);
+        console.log('playNumbers ', newPlayNumbers);
     }
 
 
@@ -165,20 +184,31 @@ function Game() {
                         <Button colorScheme="teal" onClick={StartGame}>Start Game</Button>
                         <Button colorScheme="red" onClick={StopGame}>Stop Game</Button>
 
-                        {Array.from({ length: 9 }, (_, i) => (
-                            <Button key={i} className={nbSelected === (i + 1) ? 'button-selected ' : 'button-normal'} onClick={() => changeNbSelected(i + 1)}>{i + 1}</Button>
-                        ))
-                        }
+                        {playNumbers
+                            .slice(1)
+                            .map((count, i) => ({ index: i + 1, count })) // on garde l'index du chiffre
+                            .filter(item => item.count > 0)  
+                            .map((item) => (
+                            <Button
+                                key={item.index}
+                                className={nbSelected === item.index ? 'button-selected' : 'button-normal'}
+                                onClick={() => changeNbSelected(item.index)}
+                            >
+                                {item.index} ({item.count})
+                            </Button>
+                        ))}
+
                     </Box>
                     {started && <p>Jeux démarré</p>}
                     {!started && <p>Jeux arrêté</p>}
 
-                    <Grid originalGrid={grid} gridData={userGrid} nbSelected={nbSelected} setGridData={setUserGrid} wrong={wrong} setWrong={setWrong} />
+                    <Grid originalGrid={grid} gridData={userGrid} nbSelected={nbSelected} setGridData={setUserGrid} wrong={wrong} setWrong={setWrong}  playNumbers={playNumbers}  setPlayNumbers={setPlayNumbers} />
 
-                    <Grid originalGrid={grid} gridData={grid} nbSelected={nbSelected} setGridData={setGrid} wrong={wrong} setWrong={setWrong} />
+                    <Grid originalGrid={grid} gridData={grid} nbSelected={nbSelected} setGridData={setGrid} wrong={wrong} setWrong={setWrong} playNumbers={playNumbers}  setPlayNumbers={setPlayNumbers}  />
 
                     NB: {nbSelected}
                     wrong : {wrong}
+{playNumbers}
 
                 </>
             ) : (
