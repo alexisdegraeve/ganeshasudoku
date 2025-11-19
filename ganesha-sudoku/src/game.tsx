@@ -3,30 +3,47 @@ import { Button, Heading, Box } from "@chakra-ui/react"
 import { useEffect, useState } from "react";
 import './game.css';
 
-interface GridProps {
+
+type GridProps = {
+    originalGrid: number[][];
     gridData: number[][];
-}
+    nbSelected: number;
+    wrong: number;
+    setWrong: React.Dispatch<React.SetStateAction<number>>;
+    setGridData: React.Dispatch<React.SetStateAction<number[][]>>;
+};
 
-function Grid({ gridData }: GridProps) {
+function Grid({ originalGrid, gridData, nbSelected, wrong, setWrong, setGridData }: GridProps) {
 
-    const selectCase = (line: number, row: number) => {
-        console.log(line, row);
+    const selectCase = (line: number, col: number) => {
+        console.log(line, col);
+        if (gridData[line][col] > -1) return;
+        if (nbSelected != originalGrid[line][col]) {
+            wrong++;
+            setWrong(wrong);
+            return;
+        }
+        const newGrid = gridData.map(r => [...r]); // clone du tableau
+        newGrid[line][col] = nbSelected;
+        setGridData(newGrid);
     };
     return (
         <>
             My GRID
             <div className="grid-full">
-                {
-                    gridData.map((row, rowIndex: number) => (
-                        <div key={rowIndex} className="grid-row">
-                            {
-                                row.map((cell: number, colIndex: number) => (
-                                    <div className="grid-cell" key={colIndex} onClick={() => selectCase(rowIndex, colIndex)}>{cell}</div>
-                                ))
-                            }
-                        </div>
-                    ))
-                }
+                {gridData.map((row, rowIndex) => (
+                    <div key={rowIndex} className="grid-row">
+                        {row.map((cell, colIndex) => (
+                            <div
+                                className={`grid-cell ${cell > -1 ? 'disabled-cell' : ''}`}
+                                key={colIndex}
+                                onClick={() => selectCase(rowIndex, colIndex)}
+                            >
+                                {cell > -1 ? cell : ''}
+                            </div>
+                        ))}
+                    </div>
+                ))}
             </div>
         </>
     )
@@ -65,6 +82,7 @@ function Game() {
     const [grid, setGrid] = useState<number[][]>([]);
     const [userGrid, setUserGrid] = useState<number[][]>([]);
     const [nbSelected, setNbSelected] = useState(-1);
+    const [wrong, setWrong] = useState(0);
 
     useEffect(() => {
         if (grid.length > 0) {
@@ -104,6 +122,15 @@ function Game() {
         return false; // aucun chiffre possible ici -> backtrack
     }
 
+    function removeCells(grid: number[][], total = 5) {
+        for (let i = 0; i < total; i++) {
+            const row = Math.floor((Math.random() * 8));
+            const col = Math.floor((Math.random() * 8));
+            console.log(row, col);
+            grid[row][col] = -1;
+        }
+    }
+
 
     // Fill the grid with 0
     const InitGrid = () => {
@@ -115,35 +142,53 @@ function Game() {
         fillGrid(newGrid, 0, 0);
 
         setGrid(newGrid);
-        const newUserGrid = Array.from({ length: 9 }, () => Array(9).fill(0));
+
+        const newUserGrid = newGrid.map(row => [...row]);
+        removeCells(newUserGrid, 40);
         setUserGrid(newUserGrid);
     }
 
     const StartGame = () => {
         console.log("Start Game");
+        setNbSelected(-1);
+        setWrong(0);
         setStarted(true);
         InitGrid();
     }
     return (
         <>
-            <Box bg="black" p={5}>
-                <Heading mb={4} color="white">Welcome to Ganesha Sudoku!</Heading>
-                <Button colorScheme="teal" onClick={StartGame}>Start Game</Button>
-                <Button colorScheme="red" onClick={StopGame}>Stop Game</Button>
 
-                {Array.from({ length: 9 }, (_, i) => (
-                    <Button key={i} colorScheme="blue" onClick={() => changeNbSelected(i + 1)}>{i + 1}</Button>
-                ))
-                }
-            </Box>
-            {started && <p>Jeux démarré</p>}
-            {!started && <p>Jeux arrêté</p>}
+            {wrong < 3 ? (
+                <>
+                    <Box bg="black" p={5}>
+                        <Heading mb={4} color="white">Welcome to Ganesha Sudoku!</Heading>
+                        <Button colorScheme="teal" onClick={StartGame}>Start Game</Button>
+                        <Button colorScheme="red" onClick={StopGame}>Stop Game</Button>
 
-            <Grid gridData={userGrid} />
+                        {Array.from({ length: 9 }, (_, i) => (
+                            <Button key={i} className={nbSelected === (i + 1) ? 'button-selected ' : 'button-normal'} onClick={() => changeNbSelected(i + 1)}>{i + 1}</Button>
+                        ))
+                        }
+                    </Box>
+                    {started && <p>Jeux démarré</p>}
+                    {!started && <p>Jeux arrêté</p>}
 
-            <Grid gridData={grid} />
+                    <Grid originalGrid={grid} gridData={userGrid} nbSelected={nbSelected} setGridData={setUserGrid} wrong={wrong} setWrong={setWrong} />
 
-            NB: {nbSelected}
+                    <Grid originalGrid={grid} gridData={grid} nbSelected={nbSelected} setGridData={setGrid} wrong={wrong} setWrong={setWrong} />
+
+                    NB: {nbSelected}
+                    wrong : {wrong}
+
+                </>
+            ) : (
+            <>
+               <div>LOSE</div>
+               <Button colorScheme="teal" onClick={StartGame}>restart Game</Button>
+            </>
+            )
+            }
+
         </>
     )
 
