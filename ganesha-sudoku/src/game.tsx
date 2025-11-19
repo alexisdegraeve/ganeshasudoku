@@ -84,35 +84,35 @@ function Game() {
         setNbSelected(nbSelect);
     }
 
+    function fillGrid(grid: number[][], row = 0, col = 0): boolean {
+        if (row === 9) return true; // toute la grille remplie
+
+        if (col === 9) return fillGrid(grid, row + 1, 0); // passer à la ligne suivante
+
+        if (grid[row][col] !== 0) return fillGrid(grid, row, col + 1); // case déjà remplie
+
+        for (let num = 1; num <= 9; num++) { // ou tableau 1-9 mélangé pour l'aléatoire
+            if (isValid({ grid, row, col, value: num })) {
+                grid[row][col] = num;
+
+                if (fillGrid(grid, row, col + 1)) return true; // avancer
+
+                grid[row][col] = 0; // pas de solution -> revenir en arrière
+            }
+        }
+
+        return false; // aucun chiffre possible ici -> backtrack
+    }
+
+
     // Fill the grid with 0
     const InitGrid = () => {
         const newGrid: number[][] = Array.from({ length: 9 }, () => Array(9).fill(0));
         const value = Math.round(Math.random() * 9) + 1;
         newGrid[0][0] = value;
         console.log(0, 0, value);
-        let startRow = 0;
-        let startCol = 1;
 
-        while (startRow < 9) {
-            while (startCol < 9) {
-                let value = Math.round(Math.random() * 8) + 1;
-                console.log('value ', value);
-
-                if (isValid({ grid: grid, row: startRow, col: startCol, value })) {
-                    startCol++;
-                }
-                else {
-                    value = -1;
-                    startCol++;
-                }
-
-                newGrid[startRow][startCol] = value;
-
-            }
-            startCol = 0;
-            startRow++;
-        }
-
+        fillGrid(newGrid, 0, 0);
 
         setGrid(newGrid);
         const newUserGrid = Array.from({ length: 9 }, () => Array(9).fill(0));
