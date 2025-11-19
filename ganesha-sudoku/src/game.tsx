@@ -43,7 +43,7 @@ function checkCol({ grid, col, value }: { grid: number[][], col: number, value: 
 }
 
 function checkBlock({ grid, row, col, value }: { grid: number[][], row: number, col: number, value: number }): boolean {
-    if (!grid[row] || !grid[col]) return false;
+    if (grid.length === 0) return false;
     const startRow = Math.floor(row / 3) * 3;
     const startCol = Math.floor(col / 3) * 3;
     for (let r = startRow; r < startRow + 3; r++) {
@@ -118,18 +118,6 @@ function Game() {
         const newUserGrid = Array.from({ length: 9 }, () => Array(9).fill(0));
         setUserGrid(newUserGrid);
     }
-
-    // const FillGrid = () => {
-    //     const row = Math.round(Math.random() * 8);
-    //     const col = Math.round(Math.random() * 8);
-    //     const value = Math.round(Math.random() * 9) + 1;
-    //     const newGrid = grid.map(r => [...r]);
-    //     console.log(row, col, value);
-    //     newGrid[row][col] = value;
-    //     setGrid(newGrid);
-
-
-    // }
 
     const StartGame = () => {
         console.log("Start Game");
