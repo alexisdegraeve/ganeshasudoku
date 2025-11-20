@@ -96,6 +96,7 @@ function Game() {
     const [time, setTime] = useState(0);
     const [timerActive, setTimerActive] = useState(false);
     const [totalCell, setTotalCell] = useState(5);
+    const [newGame, setNewGame] = useState(false);
 
 
     useEffect(() => {
@@ -121,13 +122,6 @@ function Game() {
 
     }, [grid, playNumbers, timerActive]);
 
-
-
-    const StopGame = () => {
-        console.log("Start Game");
-        setTimerActive(false);
-        setStarted(false);
-    }
 
     const changeNbSelected = (nbSelect: number) => {
         setNbSelected(nbSelect);
@@ -206,31 +200,45 @@ function Game() {
         if (level === 2) {
             setTotalCell(40);
         }
+        StartGame();
+    }
 
+    const StartNewGame = () => {
+        setNbSelected(-1);
+        setWrong(0);
+        setNewGame(true);
+        InitGrid();
     }
 
     const StartGame = () => {
         console.log("Start Game");
-        setNbSelected(-1);
-        setWrong(0);
         setStarted(true);
-        InitGrid();
         setTime(0);
         setTimerActive(true);
     }
+
+    
+    const StopGame = () => {
+        console.log("Start Game");
+        setTimerActive(false);
+        setStarted(false);
+        setNewGame(false);
+    }
+
     return (
         <>
             <Box bg="black" p={5}>
                 <Heading mb={4} color="white">Welcome to Ganesha Sudoku!</Heading>
                 <p>Time: {Math.floor(time / 60)}:{String(time % 60).padStart(2, '0')}</p>
-                {!rules && !started && <Button colorScheme="teal" onClick={ShowRules}>Rules</Button>}
-                {!started && <>
+                {!rules && !started && !newGame && <Button colorScheme="teal" onClick={ShowRules}>Rules</Button>}
 
+                 {!started && !newGame && <>
+                    <Button colorScheme="teal" onClick={() => StartNewGame()}>New Game</Button>
+                 </>}
+                {!started && newGame && <>
                     <Button colorScheme="teal" onClick={() => SetMode()}>Easy</Button>
                     <Button colorScheme="teal" onClick={() => SetMode(1)}>Medium</Button>
                     <Button colorScheme="teal" onClick={() => SetMode(2)}>Hard</Button>
-                    <Button colorScheme="teal" onClick={() => StartGame()}>Start Game</Button>
-
                     {started && <p>Jeux démarré</p>}
                     {!started && <p>Jeux arrêté</p>}
 
@@ -267,7 +275,7 @@ function Game() {
                 playNumbers.slice(1).every(n => n === 0) ? (
                     <>
                         <p>You Win !</p>
-                        <Button colorScheme="teal" onClick={StartGame}>restart Game</Button>
+                        <Button colorScheme="teal" onClick={StopGame}>restart Game</Button>
                     </>
                 )
                     : (
@@ -303,7 +311,7 @@ function Game() {
                 started &&
                 <>
                     <div>LOSE</div>
-                    <Button colorScheme="teal" onClick={StartGame}>restart Game</Button>
+                    <Button colorScheme="teal" onClick={StopGame}>restart Game</Button>
                 </>
 
 
