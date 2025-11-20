@@ -233,7 +233,9 @@ function Game() {
         <>
             <Box bg="black" p={5}>
                 <Heading mb={4} color="white">Welcome to Ganesha Sudoku!</Heading>
-                <p>Time: {Math.floor(time / 60)}:{String(time % 60).padStart(2, '0')}</p>
+                {!rules && started && newGame &&
+                    <p>Time: {Math.floor(time / 60)}:{String(time % 60).padStart(2, '0')}</p>
+                }
                 {!rules && !started && !newGame && <Button colorScheme="teal" onClick={ShowRules}>Rules</Button>}
 
                  {!started && !newGame && <>
