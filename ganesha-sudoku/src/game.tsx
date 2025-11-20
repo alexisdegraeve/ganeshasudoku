@@ -1,6 +1,8 @@
 
 import { Button, Heading, Box } from "@chakra-ui/react"
 import { useEffect, useState } from "react";
+import  LogoSudokuPath from './assets/logo_sudoku.svg';
+import  LogoPlayPath from './assets/logo.svg';
 import './game.css';
 
 
@@ -232,15 +234,19 @@ function Game() {
     return (
         <>
             <Box bg="black" p={5}>
-                <Heading mb={4} color="white">Welcome to Ganesha Sudoku!</Heading>
+                <Heading mb={4} color="white">
+                    <img src={LogoSudokuPath} alt="Logo" width={324} height={90} />
+                    
+                </Heading>
                 {!rules && started && newGame &&
                     <p>Time: {Math.floor(time / 60)}:{String(time % 60).padStart(2, '0')}</p>
                 }
-                {!rules && !started && !newGame && <Button colorScheme="teal" onClick={ShowRules}>Rules</Button>}
+                {!rules && !started && !newGame && <Button colorScheme="pink" onClick={ShowRules}>Rules</Button>}
 
-                 {!started && !newGame && <>
-                    <Button colorScheme="teal" onClick={() => StartNewGame()}>New Game</Button>
-                 </>}
+                 {!started && !newGame && <div className="logo-play">
+                    <img src={LogoPlayPath} alt="Logo" width={148} height={148} className="rotate360" />
+                    <Button colorScheme="pink" onClick={() => StartNewGame()}>New Game</Button>
+                 </div>}
                 {!started && newGame && <>
                     <Button colorScheme="teal" onClick={() => SetMode()}>Easy</Button>
                     <Button colorScheme="teal" onClick={() => SetMode(1)}>Medium</Button>
