@@ -191,14 +191,18 @@ function Game() {
 
     const SetMode = (level: number = 0) => {
         if (level === 0) {
-            setTotalCell(5);
+            setTotalCell(35);
         }
         if (level === 1) {
-            setTotalCell(10);
+            setTotalCell(45);
         }
 
         if (level === 2) {
-            setTotalCell(40);
+            setTotalCell(55);
+        }
+
+        if (level === 3) {
+            setTotalCell(60);
         }
         StartGame();
     }
@@ -239,6 +243,7 @@ function Game() {
                     <Button colorScheme="teal" onClick={() => SetMode()}>Easy</Button>
                     <Button colorScheme="teal" onClick={() => SetMode(1)}>Medium</Button>
                     <Button colorScheme="teal" onClick={() => SetMode(2)}>Hard</Button>
+                    <Button colorScheme="teal" onClick={() => SetMode(3)}>Expert</Button>
                     {started && <p>Jeux démarré</p>}
                     {!started && <p>Jeux arrêté</p>}
 
