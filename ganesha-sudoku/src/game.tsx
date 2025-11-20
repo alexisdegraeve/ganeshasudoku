@@ -95,6 +95,7 @@ function Game() {
     const [playNumbers, setPlayNumbers] = useState<number[]>([]);
     const [time, setTime] = useState(0);
     const [timerActive, setTimerActive] = useState(false);
+    const [totalCell, setTotalCell] = useState(5);
 
 
     useEffect(() => {
@@ -181,7 +182,7 @@ function Game() {
         setGrid(newGrid);
 
         const newUserGrid = newGrid.map(row => [...row]);
-        removeCells(newUserGrid, 5);
+        removeCells(newUserGrid, totalCell);
         setUserGrid(newUserGrid);
     }
 
@@ -191,6 +192,21 @@ function Game() {
 
     const HideRules = () => {
         setRules(false);
+    }
+
+    
+    const SetMode = (level: number = 0) => {
+        if(level === 0 ){
+            setTotalCell(5);
+        }
+        if(level === 1 ){
+            setTotalCell(10);
+        }
+
+        if(level === 2 ){
+            setTotalCell(40);
+        }
+        
     }
 
     const StartGame = () => {
@@ -210,7 +226,10 @@ function Game() {
                 {!rules && !started && <Button colorScheme="teal" onClick={ShowRules}>Rules</Button> }
                 {!started && <>
 
-                    <Button colorScheme="teal" onClick={StartGame}>Start Game</Button>
+                    <Button colorScheme="teal" onClick={() => SetMode()}>Easy</Button>
+                    <Button colorScheme="teal" onClick={() => SetMode(1)}>Medium</Button>
+                    <Button colorScheme="teal" onClick={() => SetMode(2)}>Hard</Button>
+                    <Button colorScheme="teal" onClick={() => StartGame()}>Start Game</Button>
 
                     {started && <p>Jeux démarré</p>}
                     {!started && <p>Jeux arrêté</p>}
