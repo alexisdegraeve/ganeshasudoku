@@ -87,6 +87,7 @@ function isValid({ grid, row, col, value }: { grid: number[][], row: number, col
 
 function Game() {
     const [started, setStarted] = useState(false);
+    const [rules, setRules] = useState(false);
     const [grid, setGrid] = useState<number[][]>([]);
     const [userGrid, setUserGrid] = useState<number[][]>([]);
     const [nbSelected, setNbSelected] = useState(-1);
@@ -184,6 +185,14 @@ function Game() {
         setUserGrid(newUserGrid);
     }
 
+    const ShowRules = () => {
+        setRules(true);
+    }
+
+    const HideRules = () => {
+        setRules(false);
+    }
+
     const StartGame = () => {
         console.log("Start Game");
         setNbSelected(-1);
@@ -198,6 +207,7 @@ function Game() {
             <Box bg="black" p={5}>
                 <Heading mb={4} color="white">Welcome to Ganesha Sudoku!</Heading>
                 <p>Time: {Math.floor(time / 60)}:{String(time % 60).padStart(2, '0')}</p>
+                {!rules && !started && <Button colorScheme="teal" onClick={ShowRules}>Rules</Button> }
                 {!started && <>
 
                     <Button colorScheme="teal" onClick={StartGame}>Start Game</Button>
@@ -208,11 +218,27 @@ function Game() {
                 </>
                 }
                 {started && !playNumbers.slice(1).every(n => n === 0) &&
+                
 
                     <Button colorScheme="red" onClick={StopGame}>Stop Game</Button>
 
                 }
             </Box>
+            {rules && !started && (
+                <>
+                    <h2>Rules</h2>
+                    <ul>
+                    <li>🔢 Fill the 9×9 grid with numbers 1–9</li>
+                    <li>➡️ Each row must contain 1–9 with no duplicates</li>
+                    <li>⬇️ Each column must contain 1–9 with no duplicates</li>
+                    <li>🟦 Each 3×3 block must contain 1–9 with no duplicates</li>
+                    <li>❌ You cannot change the numbers given at the start</li>
+                    <li>🏆 You win when the whole grid is correctly filled</li>
+                    </ul>
+                    <Button colorScheme="teal" onClick={HideRules}>OK</Button>
+                </>
+                )
+            }
 
             {wrong < 3 && started ? (
 
