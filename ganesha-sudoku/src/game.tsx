@@ -22,7 +22,6 @@ type GridProps = {
 function Grid({ originalGrid, gridData, nbSelected, wrong, setWrong, setGridData, playNumbers, setPlayNumbers }: GridProps) {
 
     const selectCase = (line: number, col: number) => {
-        console.log(line, col);
         if (gridData[line][col] > -1) return;
         if (nbSelected === -1) return;
         if (nbSelected != originalGrid[line][col]) {
@@ -107,14 +106,7 @@ function Game() {
         if (playNumbers.slice(1).every(n => n === 0)) {
             setTimeout(() => {
                 setTimerActive(false); // arrêt du timer
-                console.log("You Win !");
             }, 0);
-        }
-        if (grid.length > 0) {
-            // ici grid est bien mis à jour
-            console.log("Grid initialisée", grid);
-            console.log('init playnumbers ', playNumbers);
-
         }
 
         if (!timerActive) return;
@@ -162,14 +154,11 @@ function Game() {
             const row = Math.floor((Math.random() * 9));
             const col = Math.floor((Math.random() * 9));
             if (grid[row][col] === -1) continue;
-            console.log(row, col);
-            console.log('playNumbers', playNumbers);
             const value = grid[row][col];
             newPlayNumbers[value]++;
             grid[row][col] = -1;
         }
         setPlayNumbers(newPlayNumbers);
-        console.log('playNumbers ', newPlayNumbers);
     }
 
 
@@ -178,8 +167,7 @@ function Game() {
         const newGrid: number[][] = Array.from({ length: 9 }, () => Array(9).fill(0));
         const value = Math.floor(Math.random() * 9) + 1;
         newGrid[0][0] = value;
-        console.log(0, 0, value);
-
+        
         fillGrid(newGrid, 0, 0);
 
         setGrid(newGrid);
@@ -224,7 +212,6 @@ function Game() {
     }
 
     const StartGame = () => {
-        console.log("Start Game");
         setStarted(true);
         setTime(0);
         setTimerActive(true);
@@ -232,7 +219,6 @@ function Game() {
 
     
     const StopGame = () => {
-        console.log("Start Game");
         setTimerActive(false);
         setStarted(false);
         setNewGame(false);
