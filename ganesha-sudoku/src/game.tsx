@@ -200,7 +200,7 @@ function Game() {
 
     const SetMode = (level: number = 0) => {
         if (level === 0) {
-            setTotalCell(5);
+            setTotalCell(35);
         }
         if (level === 1) {
             setTotalCell(45);
