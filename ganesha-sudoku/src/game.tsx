@@ -253,7 +253,7 @@ function Game() {
                  </div>}
                 {!started && newGame && <div className="levels">
                 
-                    <Button colorScheme="pink" onClick={() => SetMode()}>Easy</Button>
+                    <Button colorScheme="pink" onClick={() => SetMode(0)}>Easy</Button>
                     <Button colorScheme="pink" onClick={() => SetMode(1)}>Medium</Button>
                     <Button colorScheme="pink" onClick={() => SetMode(2)}>Hard</Button>
                     <Button colorScheme="pink" onClick={() => SetMode(3)}>Expert</Button>
