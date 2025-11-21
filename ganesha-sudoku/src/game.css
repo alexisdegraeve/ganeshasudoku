@@ -62,12 +62,13 @@
     display: flex;
     justify-content: center;
     flex-direction: column;
-    margin-right: auto;
-    margin-left: auto;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 
 .grid-row {
     display: flex;
+    justify-content: center;
 }
 
 .grid-cell {
@@ -77,18 +78,40 @@
     border-radius: 0.25rem;
     font-weight: bold;
     color: #000000;
-    width: 3rem;
-    height: 3rem;
+    width: 2rem;
+    height: 2rem;
     justify-content: center;
     align-items: center;
 }
 
-.button-normal {
-    background-color: blue !important;
+.select-nb {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
-.button-selected {
-    background-color: red !important;
+.select-nb .number {
+    font-weight: bold;
+    font-size: 0.85rem;
+}
+
+.select-nb .quantity {
+    color: #ccc;
+    font-weight: normal;
+    font-size: 0.65rem;
+}
+
+.select-nb button {
+    padding: 0.5rem;
+    width: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.select-nb .button-selected {
+    background-color: black !important;
+    border: 0.15rem solid var(--chakra-colors-pink-500) !important;
     color: white;
 }
 

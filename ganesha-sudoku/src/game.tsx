@@ -292,27 +292,30 @@ function Game() {
                     : (
 
                         <>
+                                                    NB: {nbSelected}
+                            wrong : {wrong}
+                            <Grid originalGrid={grid} gridData={userGrid} nbSelected={nbSelected} setGridData={setUserGrid} wrong={wrong} setWrong={setWrong} playNumbers={playNumbers} setPlayNumbers={setPlayNumbers} />
+
+
+                            <div className="select-nb">
                             {playNumbers
                                 .slice(1)
                                 .map((count, i) => ({ index: i + 1, count })) // on garde l'index du chiffre
                                 .filter(item => item.count > 0)
                                 .map((item) => (
                                     <Button
+                                        colorScheme="pink"
                                         key={item.index}
                                         className={nbSelected === item.index ? 'button-selected' : 'button-normal'}
                                         onClick={() => changeNbSelected(item.index)}
                                     >
-                                        {item.index} ({item.count})
+                                        <span className="number">{item.index}</span>
+                                        <span className="quantity">{item.count}</span>
                                     </Button>
                                 ))}
+                            </div>
 
-                            <Grid originalGrid={grid} gridData={userGrid} nbSelected={nbSelected} setGridData={setUserGrid} wrong={wrong} setWrong={setWrong} playNumbers={playNumbers} setPlayNumbers={setPlayNumbers} />
 
-                            <Grid originalGrid={grid} gridData={grid} nbSelected={nbSelected} setGridData={setGrid} wrong={wrong} setWrong={setWrong} playNumbers={playNumbers} setPlayNumbers={setPlayNumbers} />
-
-                            NB: {nbSelected}
-                            wrong : {wrong}
-                            {playNumbers}
 
                         </>
                     )
