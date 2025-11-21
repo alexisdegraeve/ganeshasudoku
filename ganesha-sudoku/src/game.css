@@ -1,4 +1,46 @@
-.logo-play {
+.levels {
+    display: flex;
+    flex-direction: column;
+}
+
+.levels button:first-child {
+    margin-top: 3rem;
+}
+
+.levels button {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.rules {
+    margin: 2rem;
+}
+
+.rules button {
+    width: 100%;
+}
+
+.rules h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #fff;
+    text-align: left;
+}
+
+.rules ul {
+    font-size: 1rem;
+    text-align: left;
+    color: #fff;
+    margin-bottom: 2rem;
+}
+
+.rules li {
+    margin-bottom: 0.25rem;
+    margin-top: 0.25rem;
+    list-style: none;
+}
+
+.rules .logo-play {
     justify-content: center;
     display: flex;
     align-items: center;
@@ -8,6 +50,12 @@
 .logo-play img {
     margin-top: 5rem;
     margin-bottom: 2rem;
+}
+
+.logo-play button {
+    width: 100%;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
 }
 
 .grid-full {

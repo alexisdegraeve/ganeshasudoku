@@ -241,21 +241,19 @@ function Game() {
                 {!rules && started && newGame &&
                     <p>Time: {Math.floor(time / 60)}:{String(time % 60).padStart(2, '0')}</p>
                 }
-                {!rules && !started && !newGame && <Button colorScheme="pink" onClick={ShowRules}>Rules</Button>}
-
-                 {!started && !newGame && <div className="logo-play">
+                
+                 {!started && !newGame && !rules && <div className="logo-play">
                     <img src={LogoPlayPath} alt="Logo" width={148} height={148} className="rotate360" />
                     <Button colorScheme="pink" onClick={() => StartNewGame()}>New Game</Button>
+                    <Button colorScheme="pink" onClick={ShowRules}>Rules</Button>
                  </div>}
-                {!started && newGame && <>
-                    <Button colorScheme="teal" onClick={() => SetMode()}>Easy</Button>
-                    <Button colorScheme="teal" onClick={() => SetMode(1)}>Medium</Button>
-                    <Button colorScheme="teal" onClick={() => SetMode(2)}>Hard</Button>
-                    <Button colorScheme="teal" onClick={() => SetMode(3)}>Expert</Button>
-                    {started && <p>Jeux démarré</p>}
-                    {!started && <p>Jeux arrêté</p>}
-
-                </>
+                {!started && newGame && <div className="levels">
+                
+                    <Button colorScheme="pink" onClick={() => SetMode()}>Easy</Button>
+                    <Button colorScheme="pink" onClick={() => SetMode(1)}>Medium</Button>
+                    <Button colorScheme="pink" onClick={() => SetMode(2)}>Hard</Button>
+                    <Button colorScheme="pink" onClick={() => SetMode(3)}>Expert</Button>
+                </div>
                 }
                 {started && !playNumbers.slice(1).every(n => n === 0) &&
 
@@ -265,7 +263,7 @@ function Game() {
                 }
             </Box>
             {rules && !started && (
-                <>
+                <div className="rules">
                     <h2>Rules</h2>
                     <ul>
                         <li>🔢 Fill the 9×9 grid with numbers 1–9</li>
@@ -275,8 +273,8 @@ function Game() {
                         <li>❌ You cannot change the numbers given at the start</li>
                         <li>🏆 You win when the whole grid is correctly filled</li>
                     </ul>
-                    <Button colorScheme="teal" onClick={HideRules}>OK</Button>
-                </>
+                    <Button colorScheme="pink" onClick={HideRules}>OK</Button>
+                </div>
             )
             }
 
