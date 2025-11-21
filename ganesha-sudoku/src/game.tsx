@@ -3,6 +3,8 @@ import { Button, Heading, Box } from "@chakra-ui/react"
 import { useEffect, useState } from "react";
 import  LogoSudokuPath from './assets/logo_sudoku.svg';
 import  LogoPlayPath from './assets/logo.svg';
+import  LosePath from './assets/lose.svg';
+import  WinPath from './assets/win.svg';
 import './game.css';
 
 
@@ -22,6 +24,7 @@ function Grid({ originalGrid, gridData, nbSelected, wrong, setWrong, setGridData
     const selectCase = (line: number, col: number) => {
         console.log(line, col);
         if (gridData[line][col] > -1) return;
+        if (nbSelected === -1) return;
         if (nbSelected != originalGrid[line][col]) {
             wrong++;
             setWrong(wrong);
@@ -125,7 +128,12 @@ function Game() {
 
 
     const changeNbSelected = (nbSelect: number) => {
-        setNbSelected(nbSelect);
+        if(nbSelected === -1) {
+            setNbSelected(nbSelect);
+        } else {
+            setNbSelected(-1);
+        }
+        
     }
 
     function fillGrid(grid: number[][], row = 0, col = 0): boolean {
@@ -168,7 +176,7 @@ function Game() {
     // Fill the grid with 0
     const InitGrid = () => {
         const newGrid: number[][] = Array.from({ length: 9 }, () => Array(9).fill(0));
-        const value = Math.round(Math.random() * 9) + 1;
+        const value = Math.floor(Math.random() * 9) + 1;
         newGrid[0][0] = value;
         console.log(0, 0, value);
 
@@ -192,7 +200,7 @@ function Game() {
 
     const SetMode = (level: number = 0) => {
         if (level === 0) {
-            setTotalCell(35);
+            setTotalCell(5);
         }
         if (level === 1) {
             setTotalCell(45);
@@ -240,7 +248,7 @@ function Game() {
                
                  {!started && !newGame && !rules && <div className="logo-play">
                     <img src={LogoPlayPath} alt="Logo" width={148} height={148} className="rotate360" />
-                    <Button colorScheme="pink" onClick={() => StartNewGame()}>New Game</Button>
+                    <Button colorScheme="pink" onClick={() => StartNewGame()}>▶ New Game</Button>
                     <Button colorScheme="pink" onClick={ShowRules}>Rules</Button>
                  </div>}
                 {!started && newGame && <div className="levels">
@@ -251,10 +259,11 @@ function Game() {
                     <Button colorScheme="pink" onClick={() => SetMode(3)}>Expert</Button>
                 </div>
                 }
-                {started && !playNumbers.slice(1).every(n => n === 0) &&
+                {started && (!playNumbers.slice(1).every(n => n === 0) && wrong < 3) &&
 
-
-                    <Button colorScheme="red" onClick={StopGame}>STOP</Button>
+                    <div className="stop-button">
+                    <Button colorScheme="red" onClick={StopGame}><div className="icon-button"><span className="square-icon">■</span></div></Button>
+                    </div>    
 
                 }
             </Box>
@@ -281,8 +290,12 @@ function Game() {
 
                 playNumbers.slice(1).every(n => n === 0) ? (
                     <>
-                        <p>You Win !</p>
-                        <Button colorScheme="teal" onClick={StopGame}>restart Game</Button>
+                        
+                        <div className="win-lose">
+                            <img src={WinPath} alt="Win" width={148} height={148} />
+                            <p>You <span className="pink">Win</span>!</p>
+                            <Button colorScheme="pink" onClick={StopGame}>▶ Restart</Button>
+                        </div>
                     </>
                 )
                     : (
@@ -323,8 +336,11 @@ function Game() {
 
                 started &&
                 <>
-                    <div>LOSE</div>
-                    <Button colorScheme="teal" onClick={StopGame}>restart Game</Button>
+                    <div className="win-lose">
+                        <img src={LosePath} alt="Logo" width={148} height={148} />
+                        <p>You <span  className="red">lose!</span></p>
+                        <Button colorScheme="pink" onClick={StopGame}>▶ Restart</Button>
+                    </div>
                 </>
 
 
