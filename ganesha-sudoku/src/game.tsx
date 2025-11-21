@@ -39,7 +39,6 @@ function Grid({ originalGrid, gridData, nbSelected, wrong, setWrong, setGridData
     };
     return (
         <>
-            My GRID
             <div className="grid-full">
                 {gridData.map((row, rowIndex) => (
                     <div key={rowIndex} className="grid-row">
@@ -238,10 +237,7 @@ function Game() {
                     <img src={LogoSudokuPath} alt="Logo" width={324} height={90} />
                     
                 </Heading>
-                {!rules && started && newGame &&
-                    <p>Time: {Math.floor(time / 60)}:{String(time % 60).padStart(2, '0')}</p>
-                }
-                
+               
                  {!started && !newGame && !rules && <div className="logo-play">
                     <img src={LogoPlayPath} alt="Logo" width={148} height={148} className="rotate360" />
                     <Button colorScheme="pink" onClick={() => StartNewGame()}>New Game</Button>
@@ -258,7 +254,7 @@ function Game() {
                 {started && !playNumbers.slice(1).every(n => n === 0) &&
 
 
-                    <Button colorScheme="red" onClick={StopGame}>Stop Game</Button>
+                    <Button colorScheme="red" onClick={StopGame}>STOP</Button>
 
                 }
             </Box>
@@ -292,8 +288,11 @@ function Game() {
                     : (
 
                         <>
-                                                    NB: {nbSelected}
-                            wrong : {wrong}
+                            <div className="info">
+                                <span className="wrong">Wrong: {wrong}</span>
+                                <span className="time">Time: {Math.floor(time / 60)}:{String(time % 60).padStart(2, '0')}</span>
+                            </div>                        
+                            
                             <Grid originalGrid={grid} gridData={userGrid} nbSelected={nbSelected} setGridData={setUserGrid} wrong={wrong} setWrong={setWrong} playNumbers={playNumbers} setPlayNumbers={setPlayNumbers} />
 
 
